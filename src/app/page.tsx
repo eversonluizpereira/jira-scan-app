@@ -32,6 +32,7 @@ interface IssueDetail {
 interface Transition {
   id: string;
   name: string;
+  toStatus: string;
 }
 
 // ─── Helpers de status ────────────────────────────────────────────────────────
@@ -141,7 +142,7 @@ export default function Home() {
   const handleStatusChange = async (statusName: string) => {
     if (!issue || updatingStatus) return;
     const tr = transitions.find(
-      (t) => t.name.toLowerCase() === statusName.toLowerCase(),
+      (t) => t.toStatus.toLowerCase() === statusName.toLowerCase(),
     );
     if (!tr) { showToast(`Transição "${statusName}" não disponível`); return; }
 
@@ -329,7 +330,7 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-2">
                 {STATUSES.map((s) => {
                   const isActive = issue.status === s;
-                  const isAvailable = transitions.some((t) => t.name.toLowerCase() === s.toLowerCase());
+                  const isAvailable = transitions.some((t) => t.toStatus.toLowerCase() === s.toLowerCase());
                   const style = STATUS_STYLES[s] ?? { bg: 'bg-gray-100', text: 'text-gray-600', border: 'border-gray-200' };
                   const activeStyle = STATUS_ACTIVE[s] ?? 'bg-gray-500 text-white border-gray-500';
 
