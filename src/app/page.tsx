@@ -255,13 +255,19 @@ export default function Home() {
             {/* Aba Buscar */}
             {tab === 'search' && (
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 space-y-3">
-                <input
-                  type="text"
-                  placeholder="Chave (PROJ-123) ou parte do título..."
-                  value={searchQuery}
-                  onChange={(e) => handleSearchChange(e.target.value)}
-                  className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
-                />
+                <div className="flex items-center border border-slate-300 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-slate-400">
+                  <span className="px-3 py-3 bg-slate-100 text-slate-500 font-mono text-sm border-r border-slate-300 select-none whitespace-nowrap">
+                    PROJ-
+                  </span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    placeholder="184"
+                    value={searchQuery.replace(/^PROJ-/i, '')}
+                    onChange={(e) => handleSearchChange(e.target.value ? `PROJ-${e.target.value}` : '')}
+                    className="flex-1 px-3 py-3 text-sm outline-none bg-white"
+                  />
+                </div>
                 {searching && (
                   <p className="text-center text-slate-400 text-sm py-2">Buscando…</p>
                 )}
