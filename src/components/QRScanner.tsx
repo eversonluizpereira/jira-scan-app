@@ -8,13 +8,15 @@ interface Props {
 
 export default function QRScanner({ onScan, onClose }: Props) {
   const [error, setError] = useState('');
-  const scannerRef = useRef<{ clear: () => Promise<void> } | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const scannerRef = useRef<any>(null);
   const mountedRef = useRef(true);
 
   useEffect(() => {
     mountedRef.current = true;
 
-    let scanner: { clear: () => Promise<void> } | null = null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let scanner: any = null;
 
     async function start() {
       try {
