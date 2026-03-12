@@ -15,28 +15,22 @@ export default function QRScanner({ onScan, onClose }: Props) {
   useEffect(() => {
     mountedRef.current = true;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let scanner: any = null;
-
     async function start() {
       try {
-        const { Html5QrcodeScanner } = await import('html5-qrcode');
+        const { Html5Qrcode } = await import('html5-qrcode');
         if (!mountedRef.current) return;
 
-        scanner = new Html5QrcodeScanner(
-          'qr-reader',
-          { fps: 10, qrbox: { width: 260, height: 260 }, rememberLastUsedCamera: true },
-          false,
-        );
+        const scanner = new Html5Qrcode('qr-reader');
+        scannerRef.current = scanner;
 
-        scanner.render(
+        await scanner.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 260, height: 260 } },
           (text: string) => {
             onScan(text);
           },
           () => { /* ignore scan errors */ },
         );
-
-        scannerRef.current = scanner;
       } catch (e) {
         if (mountedRef.current) setError(String(e));
       }
@@ -46,7 +40,7 @@ export default function QRScanner({ onScan, onClose }: Props) {
 
     return () => {
       mountedRef.current = false;
-      scannerRef.current?.clear().catch(() => {});
+      scannerRef.current?.stop().catch(() => {});
     };
   }, [onScan]);
 
