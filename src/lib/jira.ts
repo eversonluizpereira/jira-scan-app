@@ -11,6 +11,9 @@ export const JIRA_HEADERS = {
 };
 
 export async function jiraFetch(path: string, init?: RequestInit) {
+  if (!BASE || !EMAIL || !TOKEN) {
+    throw new Error('Variáveis de ambiente JIRA_BASE_URL, JIRA_EMAIL e JIRA_API_TOKEN não configuradas na Vercel.');
+  }
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: { ...JIRA_HEADERS, ...(init?.headers ?? {}) },
